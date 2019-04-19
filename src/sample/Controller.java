@@ -3,22 +3,28 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import java.io.BufferedReader;
+import sample.bean.FileController;
+import sample.bean.Logging;
+
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+
 
 
 public class Controller {
 
     @FXML
-    public CheckBox idSplitFlag;
+    public RadioButton countLinesTgl;
+
+    @FXML
+    public RadioButton fileLinesTgl;
+
+    @FXML
+    public RadioButton partitionTgl;
 
     @FXML
     private TextField outputPath;
@@ -30,12 +36,10 @@ public class Controller {
     private TextField inputPath;
 
 
-
     private Object Stage;
 
 
     public void initialize() {
-
         final String dir = System.getProperty("user.dir");
         inputPath.setText(dir);
         outputPath.setText(dir);
@@ -78,55 +82,69 @@ public class Controller {
     }
 
     /**
-     * Logging message for screen
-     *
-     * @param level
-     * @param header
-     * @param msg
-     */
-    public void loggingMessage(Alert.AlertType level, String header, String msg) {
-        Alert alert = new Alert(level);
-        alert.setTitle("Dialog SplitFile");
-        alert.setHeaderText(header);
-        alert.setContentText(msg);
-        alert.showAndWait();
-    }
-
-    /**
      * @param actionEvent
      */
     public void handleSubmitButtonAction(ActionEvent actionEvent) {
         //Init variables
         File inputFile = new File(inputPath.getText());
         File outputFile = new File(outputPath.getText());
+        FileController fileController = new FileController();
+        int templateChar = 0;
 
         try {
-            Integer countLines = Integer.parseInt(numLines.getText());
-
             //Exist the directories
-            if (!inputFile.isFile() || !outputFile.isDirectory()) {
-                loggingMessage(Alert.AlertType.ERROR,
+            if (!outputFile.isDirectory()) {
+                Logging.loggingMessage(Alert.AlertType.ERROR,
                         "Error de Directorios",
-                        "Algun fichero o directorio no existe");
+                        "Algun directorio no existe");
             } else {
                 StringBuilder dirAbsoluteOut = new StringBuilder(outputFile.getAbsolutePath());
                 dirAbsoluteOut.append("/");
                 dirAbsoluteOut.append(inputFile.getName());
 
 
-                if (!idSplitFlag.isSelected()) {
+                if (fileLinesTgl.isSelected()) {
                     // Createde the file
-                    createFile(inputFile, outputFile.getAbsolutePath() + "/" + inputFile.getName(), countLines);
-                    loggingMessage(Alert.AlertType.INFORMATION,
-                            "Los siguientes Ficheros se han creado: ",
-                            dirAbsoluteOut.toString());
-                }else{
-                    //TODO
+                    Integer countLines = Integer.parseInt(numLines.getText());
+                    if (countLines != null && inputFile.isFile()) {
+                        System.out.println(inputFile.getAbsolutePath());
+                        System.out.println(outputFile.getAbsolutePath());
+
+                        //Llama a la funcion ue splitea y valida el fichero de entrada
+                        Integer fileCount = fileController.splitFile(inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), countLines, templateChar);
+
+                        System.out.println(fileController.getLog());
+
+                        Logging.loggingMessage(Alert.AlertType.INFORMATION, "Exito",
+                                "Se han creado  " + fileCount + " ficheros.", fileController.getIndexLevel() + " Errores.");
+                    } else {
+                        Logging.loggingMessage(Alert.AlertType.ERROR,
+                                "Error de fichero",
+                                "Algun fichero no existe");
+                    }
+                } else if (countLinesTgl.isSelected()) {
+                    for (File fileTxt : outputFile.listFiles()) {
+                        System.out.println(fileController.fileNumbers(fileTxt));
+                    }
+                } else if (partitionTgl.isSelected()) {
+                    Integer countLines = Integer.parseInt(numLines.getText());
+                    if (countLines != null && inputFile.isFile()) {
+
+                    } else {
+                        Logging.loggingMessage(Alert.AlertType.ERROR,
+                                "Error de Directorios",
+                                "Algun fichero o directorio no existe");
+                    }
+                } else {
+                    Logging.loggingMessage(Alert.AlertType.ERROR,
+                            "Error de Campos",
+                            "No has seleccionado opción.");
                 }
+
             }
 
         } catch (Exception e) {
-            loggingMessage(Alert.AlertType.ERROR,
+            Logging.loggingMessage(Alert.AlertType.ERROR,
                     "Error de lineas",
                     "El numero añadido de lineas no es correcto");
         }
@@ -152,52 +170,4 @@ public class Controller {
         String text = openDirectory();
         outputPath.setText(text);
     }
-
-    /**
-     *
-     * @param ficheroOriginal
-     * @param ficheroCopia
-     */
-    public static void createFile(File ficheroOriginal, String ficheroCopia, Integer countLines) {
-        FileReader fr = null;
-        BufferedReader br = null;
-        FileWriter fichero = null;
-        PrintWriter pw = null;
-
-        // Lectura del fichero
-        String linea;
-        Integer count = 0;
-
-        try {
-            // Se abre el fichero original para lectura
-            fr = new FileReader(ficheroOriginal);
-            br = new BufferedReader(fr);
-
-            // Se abre el fichero original para escritura
-            fichero = new FileWriter(ficheroCopia);
-            pw = new PrintWriter(fichero);
-
-
-            while ((linea = br.readLine()) != null && count < countLines) {
-                System.out.println(linea);
-                pw.println(linea);
-                count++;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != fr) {
-                    fr.close();
-                }
-                if (null != fichero) {
-                    fichero.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-    }
-
 }
