@@ -89,8 +89,6 @@ public class FileController {
         String result = line.replaceAll("[^\\p{L}\\p{Z}*.,?·\\-:]", "?");
 
         if (result.contains("?")) {
-            //TODO
-        } else {
             debug("Line " + index + ": INCORRECT CHARACTER. Testing the line.");
             this.indexLevel++;
         }
