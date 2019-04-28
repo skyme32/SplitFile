@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="500.0"
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="500.0"
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <center>
         <GridPane BorderPane.alignment="CENTER">
@@ -20,24 +20,39 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
                 <Label alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="160.0" text="Fichero de entrada: "/>
                 <Label alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="160.0" text="Fichero de salida: "
                        GridPane.rowIndex="1"/>
-                <Button mnemonicParsing="false" onAction="#handleInputfile" text="Path" GridPane.columnIndex="2"/>
+                <Button mnemonicParsing="false" onAction="#handleInputfile" text="Path" GridPane.columnIndex="2">
+                    <GridPane.margin>
+                        <Insets left="10.0"/>
+                    </GridPane.margin>
+                </Button>
                 <TextField id="inputPath" fx:id="inputPath" disable="true" GridPane.columnIndex="1"/>
                 <TextField id="outputPath" fx:id="outputPath" disable="true" GridPane.columnIndex="1"
                            GridPane.rowIndex="1"/>
                 <Button mnemonicParsing="false" onAction="#handleOutpufile" text="Path" GridPane.columnIndex="2"
-                        GridPane.rowIndex="1"/>
+                        GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets left="10.0"/>
+                    </GridPane.margin>
+                </Button>
                 <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleSubmitButtonAction"
-                        text="Ejecutar" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                        text="Ejecutar" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
                 <TextField fx:id="numLines" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                 <Label alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="160.0" text="Numero de lineas: "
                        GridPane.rowIndex="2"/>
-                <RadioButton mnemonicParsing="false" text="Lineas de la partición" GridPane.columnIndex="1"
-                             GridPane.rowIndex="4" fx:id="partitionTgl">
+                <RadioButton fx:id="partitionTgl" mnemonicParsing="false" text="Partir fichero" GridPane.columnIndex="1"
+                             GridPane.rowIndex="5">
                     <GridPane.margin>
                         <Insets left="10.0"/>
                     </GridPane.margin>
@@ -45,18 +60,27 @@
                         <ToggleGroup fx:id="toggleGroup"/>
                     </toggleGroup>
                 </RadioButton>
-                <RadioButton mnemonicParsing="false" prefHeight="18.0" text="Lineas de fichero" GridPane.columnIndex="1"
-                             GridPane.rowIndex="3" toggleGroup="$toggleGroup" fx:id="fileLinesTgl">
+                <RadioButton fx:id="fileLinesTgl" mnemonicParsing="false" prefHeight="18.0" text="Crear un fichero"
+                             toggleGroup="$toggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <GridPane.margin>
                         <Insets left="10.0"/>
                     </GridPane.margin>
                 </RadioButton>
-                <RadioButton mnemonicParsing="false" text="Fichero de conteo" GridPane.columnIndex="1"
-                             GridPane.rowIndex="5" toggleGroup="$toggleGroup" fx:id="countLinesTgl">
+                <RadioButton fx:id="countLinesTgl" mnemonicParsing="false" text="Contar lineas"
+                             toggleGroup="$toggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="6">
                     <GridPane.margin>
                         <Insets left="10.0"/>
                     </GridPane.margin>
                 </RadioButton>
+                <Label alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="160.0" text="Longitud caracterers: "
+                       GridPane.rowIndex="3"/>
+                <TextField fx:id="numLines1" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <TextArea fx:id="textAreaLog" prefHeight="400.0" prefWidth="200.0" GridPane.columnSpan="2147483647"
+                          GridPane.rowIndex="8" GridPane.rowSpan="2147483647">
+                    <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="15.0"/>
+                    </GridPane.margin>
+                </TextArea>
             </children>
             <BorderPane.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>

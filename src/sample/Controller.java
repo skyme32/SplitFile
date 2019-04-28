@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -12,7 +13,6 @@ import sample.bean.FileController;
 import sample.bean.Logging;
 
 import java.io.File;
-
 
 
 public class Controller {
@@ -35,14 +35,18 @@ public class Controller {
     @FXML
     private TextField inputPath;
 
+    @FXML
+    private TextArea textAreaLog;
+
 
     private Object Stage;
+    private StringBuilder strLog = new StringBuilder();
 
 
     public void initialize() {
         final String dir = System.getProperty("user.dir");
-        inputPath.setText(dir);
-        outputPath.setText(dir);
+        //inputPath.setText(dir);
+        //outputPath.setText(dir);
         numLines.setText("10");
     }
 
@@ -57,7 +61,7 @@ public class Controller {
         File selectedDirectory = directoryChooser.showDialog((Window) Stage);
 
         if (selectedDirectory == null) {
-            System.err.println("No Directory selected");
+            textAreaLog.setText("No Directory selected");
         } else {
             path = selectedDirectory.getAbsolutePath();
         }
@@ -74,7 +78,7 @@ public class Controller {
         File selectFile = fileChooser.showOpenDialog((Window) Stage);
 
         if (selectFile == null) {
-            System.err.println("No File selected");
+            textAreaLog.setText("No File selected");
         } else {
             path = selectFile.getAbsolutePath();
         }
@@ -101,34 +105,34 @@ public class Controller {
                 StringBuilder dirAbsoluteOut = new StringBuilder(outputFile.getAbsolutePath());
                 dirAbsoluteOut.append("/");
                 dirAbsoluteOut.append(inputFile.getName());
-
+                Integer countLines = Integer.parseInt(numLines.getText());
 
                 if (fileLinesTgl.isSelected()) {
                     // Createde the file
-                    Integer countLines = Integer.parseInt(numLines.getText());
                     if (countLines != null && inputFile.isFile()) {
-                        System.out.println(inputFile.getAbsolutePath());
-                        System.out.println(outputFile.getAbsolutePath());
-
-                        //Llama a la funcion ue splitea y valida el fichero de entrada
-                        Integer fileCount = fileController.splitFile(inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), countLines, templateChar);
-
-                        System.out.println(fileController.getLog());
-
-                        Logging.loggingMessage(Alert.AlertType.INFORMATION, "Exito",
-                                "Se han creado  " + fileCount + " ficheros.", fileController.getIndexLevel() + " Errores.");
+                        textAreaLog.appendText("Reading " + inputFile.getAbsolutePath() + "\n");
+                        fileController.createFile(inputFile, outputFile.getAbsolutePath() + "/" + inputFile.getName(), countLines);
+                        textAreaLog.appendText("Created " + outputFile.getAbsolutePath() + "/" + inputFile.getName() + "\n");
                     } else {
                         Logging.loggingMessage(Alert.AlertType.ERROR,
                                 "Error de fichero",
                                 "Algun fichero no existe");
                     }
                 } else if (countLinesTgl.isSelected()) {
+                    textAreaLog.appendText(outputFile.getAbsolutePath() + "\n");
                     for (File fileTxt : outputFile.listFiles()) {
-                        System.out.println(fileController.fileNumbers(fileTxt));
+                        textAreaLog.appendText(fileTxt.getName() + "\t" + fileController.fileNumbers(fileTxt) + "\n");
                     }
+                    textAreaLog.appendText("----------- END FILE -----------\n");
                 } else if (partitionTgl.isSelected()) {
-                    Integer countLines = Integer.parseInt(numLines.getText());
                     if (countLines != null && inputFile.isFile()) {
+                        //Llama a la funcion ue splitea y valida el fichero de entrada
+                        Integer fileCount = fileController.splitFile(inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), countLines, templateChar);
+
+                        textAreaLog.setText(fileController.getLog().toString());
+
+                        Logging.loggingMessage(Alert.AlertType.INFORMATION, "Exito",
+                                "Se han creado  " + fileCount + " ficheros.", fileController.getIndexLevel() + " Errores.");
 
                     } else {
                         Logging.loggingMessage(Alert.AlertType.ERROR,

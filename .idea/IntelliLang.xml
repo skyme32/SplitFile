@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="LanguageInjectionConfiguration">
+    <injection language="file-reference" injector-id="xml">
+      <display-name>Image/@url</display-name>
+      <place><![CDATA[xmlAttribute().withLocalName(string().equalTo("url")).withParent(xmlTag().withLocalName(string().equalTo("Image")).withNamespace(string().equalTo("http://javafx.com/javafx/8")))]]></place>
+    </injection>
+  </component>
+</project>

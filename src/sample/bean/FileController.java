@@ -42,9 +42,9 @@ public class FileController {
             }
 
         } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
+            //fnfe.printStackTrace();
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            //ioe.printStackTrace();
         } finally {
             try {
                 if (bf != null) bf.close();
@@ -120,7 +120,7 @@ public class FileController {
                     FileUtils.writeLines(outputFile, newLines);
                     newLines.clear();
                     counter = 1;
-                    System.out.println("Line " + this.indexLine + " comprobed.");
+                    debug("The Lines " + this.indexLine + " comprobed.");
                 }
                 this.indexLine++;
             }
@@ -157,6 +157,8 @@ public class FileController {
         FileWriter fichero = null;
         PrintWriter pw = null;
 
+        System.out.println(ficheroCopia);
+
         // Lectura del fichero
         String linea;
         Integer count = 0;
@@ -172,7 +174,6 @@ public class FileController {
 
 
             while ((linea = br.readLine()) != null && count < countLines) {
-                System.out.println(linea);
                 pw.println(linea);
                 count++;
             }
