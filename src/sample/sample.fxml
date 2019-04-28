@@ -74,7 +74,7 @@
                 </RadioButton>
                 <Label alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="160.0" text="Longitud caracterers: "
                        GridPane.rowIndex="3"/>
-                <TextField fx:id="numLines1" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <TextField fx:id="numTemplate" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                 <TextArea fx:id="textAreaLog" prefHeight="400.0" prefWidth="200.0" GridPane.columnSpan="2147483647"
                           GridPane.rowIndex="8" GridPane.rowSpan="2147483647">
                     <GridPane.margin>

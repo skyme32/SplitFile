@@ -134,7 +134,6 @@ public class FileController {
                     FileUtils.writeLines(outputFile, newLines);
                     newLines.clear();
                     counter = 1;
-                    debug("The Lines " + this.indexLine + " comprobed.");
                 }
                 this.indexLine++;
             }

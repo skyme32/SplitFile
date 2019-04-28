@@ -33,6 +33,9 @@ public class Controller {
     private TextField numLines;
 
     @FXML
+    private TextField numTemplate;
+
+    @FXML
     private TextField inputPath;
 
     @FXML
@@ -48,6 +51,7 @@ public class Controller {
         //inputPath.setText(dir);
         //outputPath.setText(dir);
         numLines.setText("10");
+        numTemplate.setText("10");
     }
 
 
@@ -61,7 +65,7 @@ public class Controller {
         File selectedDirectory = directoryChooser.showDialog((Window) Stage);
 
         if (selectedDirectory == null) {
-            textAreaLog.setText("No Directory selected");
+            textAreaLog.setText("Directorio no seleccionado. \n");
         } else {
             path = selectedDirectory.getAbsolutePath();
         }
@@ -78,7 +82,7 @@ public class Controller {
         File selectFile = fileChooser.showOpenDialog((Window) Stage);
 
         if (selectFile == null) {
-            textAreaLog.setText("No File selected");
+            textAreaLog.setText("Fichero no seleccionado \n");
         } else {
             path = selectFile.getAbsolutePath();
         }
@@ -95,6 +99,7 @@ public class Controller {
         FileController fileController = new FileController();
         int templateChar = 0;
 
+
         try {
             //Exist the directories
             if (!outputFile.isDirectory()) {
@@ -110,9 +115,9 @@ public class Controller {
                 if (fileLinesTgl.isSelected()) {
                     // Createde the file
                     if (countLines != null && inputFile.isFile()) {
-                        textAreaLog.appendText("Reading " + inputFile.getAbsolutePath() + "\n");
+                        textAreaLog.appendText("Leiendo " + inputFile.getAbsolutePath() + "\n");
                         fileController.createFile(inputFile, outputFile.getAbsolutePath() + "/" + inputFile.getName(), countLines);
-                        textAreaLog.appendText("Created " + outputFile.getAbsolutePath() + "/" + inputFile.getName() + "\n");
+                        textAreaLog.appendText("Creado " + outputFile.getAbsolutePath() + "/" + inputFile.getName() + "\n");
                     } else {
                         Logging.loggingMessage(Alert.AlertType.ERROR,
                                 "Error de fichero",
@@ -126,10 +131,21 @@ public class Controller {
                     textAreaLog.appendText("----------- END FILE -----------\n");
                 } else if (partitionTgl.isSelected()) {
                     if (countLines != null && inputFile.isFile()) {
+                        try {
+                            templateChar = Integer.parseInt(numTemplate.getText());
+                        } catch (Exception e) {
+                            Logging.loggingMessage(Alert.AlertType.ERROR,
+                                    "Error de Tempate",
+                                    "El numero de template es incorrecto");
+                        }
+
                         //Llama a la funcion ue splitea y valida el fichero de entrada
                         Integer fileCount = fileController.splitFile(inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), countLines, templateChar);
 
-                        textAreaLog.setText(fileController.getLog().toString());
+                        textAreaLog.appendText(fileController.getLog().toString() + "\n");
+                        textAreaLog.appendText("Se han creado  " + fileCount + " ficheros.\n");
+                        textAreaLog.appendText(fileController.getIndexLevel() + " Errores.\n");
+                        textAreaLog.appendText("----------- END FILE -----------\n");
 
                         Logging.loggingMessage(Alert.AlertType.INFORMATION, "Exito",
                                 "Se han creado  " + fileCount + " ficheros.", fileController.getIndexLevel() + " Errores.");
