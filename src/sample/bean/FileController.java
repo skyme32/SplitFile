@@ -15,6 +15,7 @@ public class FileController {
      **/
     Integer LINE_TEMPLATE_IN = 4227;
 
+
     /**
      * VARIABLES
      **/
@@ -72,12 +73,27 @@ public class FileController {
         String lenghtLineStr = lenghtLine.toString();
 
         if (lenghtLineStr.equals(intLength.toString())) {
-            //debug("Line "+index+": correct length, "+intLength+" characters, template "+lenghtLine+" characters.");
+            //TODO
         } else {
             debug("Line " + index + ": INCORRECT length, " + intLength + " characters, template " + lenghtLine + " characters.");
             this.indexLevel++;
         }
 
+    }
+
+    /**
+     * @param line
+     * @param index
+     */
+    private void validateStrangeCharacters(String line, Integer index) {
+        String result = line.replaceAll("[^\\p{L}\\p{Z}*.,?·\\-:]", "?");
+
+        if (result.contains("?")) {
+            //TODO
+        } else {
+            debug("Line " + index + ": INCORRECT CHARACTER. Testing the line.");
+            this.indexLevel++;
+        }
     }
 
 
@@ -98,13 +114,13 @@ public class FileController {
         List<String> newLines = new ArrayList<String>();
         LineIterator it = FileUtils.lineIterator(fileToRead);
 
-        debug("Reading file...");
         try {
             while (it.hasNext()) {
                 String line = it.nextLine();
 
                 //Validate the lenght
                 validateLenght(line, templateChar, this.indexLine);
+                validateStrangeCharacters(line, this.indexLine);
 
                 newLines.add(line);
                 counter++;
